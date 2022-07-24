@@ -1,13 +1,13 @@
 from django.shortcuts import get_object_or_404
 from posts.models import Group, Post, User
-from rest_framework import filters, permissions, status, viewsets
+from rest_framework import filters, permissions, status, viewsets, mixins
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.response import Response
 
 from .permissions import IsAuthorOrReadOnly
 from .serializers import (
     CommentSerializer, FollowSerializer,
-    GroupSerializer, PostSerializer
+    GroupSerializer, PostSerializer,
 )
 
 
@@ -15,7 +15,7 @@ class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
-    permission_classes = [IsAuthorOrReadOnly, ]
+    permission_classes = [IsAuthorOrReadOnly]
     pagination_class = LimitOffsetPagination
 
     def perform_create(self, serializer):
@@ -26,7 +26,7 @@ class GroupViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
 
-    permission_classes = [IsAuthorOrReadOnly, ]
+    permission_classes = [IsAuthorOrReadOnly]
 
     def create(self, request):
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
@@ -34,7 +34,7 @@ class GroupViewSet(viewsets.ReadOnlyModelViewSet):
 
 class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
-    permission_classes = [IsAuthorOrReadOnly, ]
+    permission_classes = [IsAuthorOrReadOnly]
 
     def get_queryset(self):
         post = get_object_or_404(Post, pk=self.kwargs.get('post_id'))
@@ -45,8 +45,13 @@ class CommentViewSet(viewsets.ModelViewSet):
         serializer.save(author=self.request.user, post=post)
 
 
-class FollowViewSet(viewsets.ModelViewSet):
-    http_method_names = ['get', 'post']
+class CreateRetrieveViewSet(
+    mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet
+):
+    pass
+
+
+class FollowViewSet(CreateRetrieveViewSet):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = FollowSerializer
     filter_backends = [filters.SearchFilter]
