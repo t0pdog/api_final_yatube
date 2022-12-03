@@ -1,64 +1,60 @@
-### Как запустить проект:
+# The Yatube API project
+Yatube is a social network for writers. It gives users the ability to create an account, post publications, follow their favorite authors, and tag posts they like.
 
-Клонировать репозиторий и перейти в него в командной строке:
+## Resources API YaMDb
+**POSTS**: Published posts.
 
+**GROUPS**: Groups uniting publications on the subject.
+
+**FOLLOW**: User subscriptions.
+
+**COMMENTS**: Comments on posts.
+
+## The technology stack is available in requirements.txt
+
+## How to run the project:
+
+Clone the repository and change into it on the command line:
 ```
 git clone https://github.com/t0pdog/api_final_yatube.git
-```
-
-```
 cd api_final_yatube
 ```
 
-Cоздать и активировать виртуальное окружение:
-
+Create and activate virtual environment:
 ```
 python -m venv venv
+. venv/Scripts/activate
 ```
 
-```
-source venv/Scripts/activate
-```
-
-```
-python -m pip install --upgrade pip
-```
-
-Установить зависимости из файла requirements.txt:
-
+Install dependencies from requirements.txt file:
 ```
 pip install -r requirements.txt
 ```
 
-Выполнить миграции:
-
+Run migrations:
 ```
 python manage.py migrate
 ```
 
-Запустить проект:
-
+Run project:
 ```
 python manage.py runserver
 ```
 
-По адресу ниже доступна документация в формате redoc:
-
+Redoc documentation is available at:
 ```
 http://127.0.0.1:8000/redoc/
 ```
 
-Вот некоторые примеры запросов к эндпоинтам и их ответы:
+## Here are some examples of endpoint requests and their responses:
 
-
-Получить список всех публикаций. При указании параметров
-limit и offset выдача должна работать с пагинацией. ( GET запрос):
+### Get a list of all publications. When specifying parameters limit and offset output should work with pagination. (GET request):
 
 ```
 http://127.0.0.1:8000/api/v1/posts/
 ```
 
-Ответ сервера:
+Server response:
 ```
 {
   "count": 123,
@@ -77,15 +73,13 @@ http://127.0.0.1:8000/api/v1/posts/
 }
 ```
 
-Добавление новой публикации в коллекцию публикаций. 
-Анонимные запросы запрещены. ( POST запрос):
+### Adding a new publication to the collection of publications. Anonymous requests are prohibited. (POST request):
 
 ```
 http://127.0.0.1:8000/api/v1/posts/
 ```
-В теле запроса передаем параметры, для создания публикации:
+In the request body, we pass parameters to create a publication:
 ```
-
 {
   "text": "string",
   "image": "string",
@@ -93,12 +87,10 @@ http://127.0.0.1:8000/api/v1/posts/
 }
 ```
 
-Возможные ответы сервера:
-```
+Possible server responses:
 
-201 Удачное выполнение запроса:
+* 1. 201 Successful execution of the request:
 ```
-
 {
   "id": 0,
   "author": "string",
@@ -109,19 +101,19 @@ http://127.0.0.1:8000/api/v1/posts/
 }
 ```
 
-400 Отсутствует обязательное поле в теле запроса:
+* 2. 400 Missing required field in request body:
 ```
 
 {
   "text": [
-    "Обязательное поле."
+    "required field."
   ]
 }
 ```
 
-401 Запрос от имени анонимного пользователя:
+* 3. 401 Request on behalf of an anonymous user:
 ```
 
 {
-  "detail": "Учетные данные не были предоставлены."
+  "detail": "Credentials were not provided."
 }
