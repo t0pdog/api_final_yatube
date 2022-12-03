@@ -89,7 +89,7 @@ In the request body, we pass parameters to create a publication:
 
 Possible server responses:
 
-* 1. 201 Successful execution of the request:
+* 201 Successful execution of the request:
 ```
 {
   "id": 0,
@@ -101,7 +101,7 @@ Possible server responses:
 }
 ```
 
-* 2. 400 Missing required field in request body:
+* 400 Missing required field in request body:
 ```
 
 {
@@ -111,7 +111,7 @@ Possible server responses:
 }
 ```
 
-* 3. 401 Request on behalf of an anonymous user:
+* 401 Request on behalf of an anonymous user:
 ```
 
 {
